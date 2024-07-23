@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="drawer" class="slideOut">
+        <div id="handle">^^^^</div>
+        <section id="toolbar">
+            <button id="rotate">
+                <p class="hidden">Click anywhere on the screen to start/stop spinning the camera.</p>
+                <div class="enabled">
+                    <b>Disable Rotation</b>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M358-164.67 310.67-212l76.66-78Q254-305.67 167-357.33 80-409 80-484q0-80.33 116.17-136.83 116.16-56.5 283.83-56.5 168.33 0 284.17 56.5Q880-564.33 880-484q0 60-64.83 106.33-64.84 46.34-171.17 71v-70.66q79-20 124.17-51.17 45.16-31.17 45.16-55.5 0-32-84.16-79.33Q645-610.67 480-610.67q-164.33 0-248.83 47.34-84.5 47.33-84.5 79.33 0 38 55.33 70.83 55.33 32.84 181.33 56.5L310.67-428 358-475.33l155.33 154.66-155.33 156Z"/></svg>
+                </div>
+                <div class="disabled hidden">
+                    <b>Enable Rotation</b>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M358-164.67 310.67-212l76.66-78Q254-305.67 167-357.33 80-409 80-484q0-80.33 116.17-136.83 116.16-56.5 283.83-56.5 168.33 0 284.17 56.5Q880-564.33 880-484q0 60-64.83 106.33-64.84 46.34-171.17 71v-70.66q79-20 124.17-51.17 45.16-31.17 45.16-55.5 0-32-84.16-79.33Q645-610.67 480-610.67q-164.33 0-248.83 47.34-84.5 47.33-84.5 79.33 0 38 55.33 70.83 55.33 32.84 181.33 56.5L310.67-428 358-475.33l155.33 154.66-155.33 156Z"/></svg>
+                </div>
+            </button>
+            <button id="mute">
+                <p class="hidden">Disables background ambient sound.</p>
+                <div class="enabled">
+                    <b>Mute Sound</b>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M560-131v-68.67q94.67-27.33 154-105 59.33-77.66 59.33-176.33 0-98.67-59-176.67-59-78-154.33-104.66V-831q124 28 202 125.5T840-481q0 127-78 224.5T560-131ZM120-360v-240h160l200-200v640L280-360H120Zm426.67 45.33v-332Q599-628 629.5-582T660-480q0 55-30.83 100.83-30.84 45.84-82.5 64.5ZM413.33-634l-104 100.67H186.67v106.66h122.66l104 101.34V-634Zm-96 154Z"/></svg>
+                </div>
+                <div class="disabled hidden">
+                    <b>Unmute Sound</b>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M806-56 677.67-184.33q-27 18.66-58 32.16-31 13.5-64.34 21.17v-68.67q20-6.33 38.84-13.66 18.83-7.34 35.5-19l-154.34-155V-160l-200-200h-160v-240H262L51.33-810.67 98.67-858l754.66 754L806-56Zm-26.67-232-48-48q19-33 28.17-69.62 9.17-36.61 9.17-75.38 0-100.22-58.34-179.11Q652-739 555.33-762.33V-831q124 28 202 125.5t78 224.5q0 51.67-14.16 100.67-14.17 49-41.84 92.33Zm-134-134-90-90v-130q47 22 73.5 66t26.5 96q0 15-2.5 29.5t-7.5 28.5Zm-170-170-104-104 104-104v208Zm-66.66 270v-131.33l-80-80H182v106.66h122L408.67-322Zm-40-171.33Z"/></svg>
+                </div>
+            </button>
+            <button id="freezeTime">
+                <p class="hidden">Stops time progression. Scroll or swipe up/down to adjust time manually.</p>
+                <div class="enabled">
+                    <b>Pause Time</b>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M523.33-200v-560H760v560H523.33ZM200-200v-560h236.67v560H200Zm390-66.67h103.33v-426.66H590v426.66Zm-323.33 0H370v-426.66H266.67v426.66Zm0-426.66v426.66-426.66Zm323.33 0v426.66-426.66Z"/></svg>            </div>
+                <div class="disabled hidden">
+                    <b>Unpause Time</b>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M320-202v-560l440 280-440 280Zm66.67-280Zm0 158.67L636-482 386.67-640.67v317.34Z"/></svg>        </button>
+            <button id="info">
+                <p class="hidden">Click to hide this information.</p>
+                <b>Info</b>
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M448.67-280h66.66v-240h-66.66v240Zm31.32-316q15.01 0 25.18-9.97 10.16-9.96 10.16-24.7 0-15.3-10.15-25.65-10.16-10.35-25.17-10.35-15.01 0-25.18 10.35-10.16 10.35-10.16 25.65 0 14.74 10.15 24.7 10.16 9.97 25.17 9.97Zm.19 516q-82.83 0-155.67-31.5-72.84-31.5-127.18-85.83Q143-251.67 111.5-324.56T80-480.33q0-82.88 31.5-155.78Q143-709 197.33-763q54.34-54 127.23-85.5T480.33-880q82.88 0 155.78 31.5Q709-817 763-763t85.5 127Q880-563 880-480.18q0 82.83-31.5 155.67Q817-251.67 763-197.46q-54 54.21-127 85.84Q563-80 480.18-80Zm.15-66.67q139 0 236-97.33t97-236.33q0-139-96.87-236-96.88-97-236.46-97-138.67 0-236 96.87-97.33 96.88-97.33 236.46 0 138.67 97.33 236 97.33 97.33 236.33 97.33ZM480-480Z"/></svg>
+            </button>        
+        </section>
+    </div>
+
+    <script>
+        let handle = document.getElementById('handle');
+
+        handle.addEventListener('click', () => {
+            document.getElementById('drawer').classList.toggle('slideOut');
+            document.getElementById('drawer').classList.toggle('slideIn');
+
+            handle.textContent = document.getElementById('drawer').classList.contains('slideOut') ? '^^^^' : 'vvvv';
+            handle.style.opacity = document.getElementById('drawer').classList.contains('slideOut') ? 0.25 : 1;
+            handle.style.background = document.getElementById('drawer').classList.contains('slideOut') ? 'none' : 'rgba(0, 0, 0, 0.75)';
+        });
+    </script>
+
+    <style>
+        /* reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            background: black;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #drawer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        #toolbar p {
+            width: fit-content;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        #toolbar {
+            
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            color: white;
+        }
+
+        #toolbar {
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        #toolbar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s;
+
+        }
+
+        button div, #toolbar button {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        button .disabled > svg {
+            opacity: 0.5;
+        }   
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes slideOut {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(calc(100% - 2rem));
+            }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(calc(100% - 2rem));
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        #handle {
+            opacity: 0.25;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            width: 100%;
+            height: 2rem;
+            transition: all 0.2s;
+        }
+
+        #handle:hover {
+            opacity: 1;
+        }
+
+        .slideOut {
+            animation: slideOut 1s forwards;
+        }
+
+        .slideIn {
+            animation: slideIn 1s forwards;
+        }
+
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.164.1/build/three.module.js"
+            }
+
+        }
+    </script>
+    <script type="module">
+
+        const rotate = document.getElementById('rotate');
+        const mute = document.getElementById('mute');
+        const freezeTime = document.getElementById('freezeTime');
+        const info = document.getElementById('info');
+        const toolbar = document.getElementById('toolbar');
+
+        rotate.addEventListener('click', () => {
+            rotate.querySelector('.enabled').classList.toggle('hidden');
+            rotate.querySelector('.disabled').classList.toggle('hidden');
+            if(rotate.querySelector('.enabled').classList.contains('hidden')) {
+                shouldSpin = false;
+            } else {
+                shouldSpin = !shouldSpin;
+            }
+        });
+
+        mute.addEventListener('click', () => {
+            mute.querySelector('.enabled').classList.toggle('hidden');
+            mute.querySelector('.disabled').classList.toggle('hidden');
+            volume = volume === 0 ? 0.5 : 0;
+            currentSound.volume = volume;
+            currentSound.paused ? currentSound.play() : currentSound.pause();
+        });
+
+        freezeTime.addEventListener('click', () => {
+            freezeTime.querySelector('.enabled').classList.toggle('hidden');
+            freezeTime.querySelector('.disabled').classList.toggle('hidden');
+        });
+
+        info.addEventListener('click', () => {
+            let buttonPs = toolbar.querySelectorAll('p');
+            buttonPs.forEach(p => {
+                p.classList.toggle('hidden');
+            });
+        });
+
+        import * as THREE from 'three';
+        import { EffectComposer } from 'https://unpkg.com/three/examples/jsm/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/RenderPass.js';
+        import { OutputPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/OutputPass.js';
+        import { UnrealBloomPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/UnrealBloomPass.js';
+        import { Water } from 'https://unpkg.com/three/examples/jsm/objects/Water.js';
+        import { OrbitControls } from 'https://unpkg.com/three/examples/jsm/controls/OrbitControls.js';
+        import { Sky } from 'https://unpkg.com/three/examples/jsm/objects/Sky.js';
+        import { GLTFLoader } from 'https://unpkg.com/three/examples/jsm/loaders/GLTFLoader.js';
+        import { EXRLoader } from 'https://unpkg.com/three/examples/jsm/loaders/EXRLoader.js';
+        import { GUI } from 'https://unpkg.com/three/examples/jsm/libs/lil-gui.module.min.js';
+        import { BokehPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/BokehPass.js';
+        import { LUTPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/LUTPass.js';
+        import { LUTCubeLoader } from 'https://unpkg.com/three/examples/jsm/loaders/LUTCubeLoader.js';
+        import { RenderPixelatedPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/RenderPixelatedPass.js';
+
+        
+        let sky, sun
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 10000);
+        const renderer = new THREE.WebGLRenderer();
+        scene.add(camera);
+
+        let hdrs = []
+
+        const exrLoader = new EXRLoader(); // Changed to EXRLoader
+        exrLoader.setDataType(THREE.FloatType); // EXR is typically used with FloatType for higher quality
+        exrLoader.load('hdr.exr', function(texture) { // Make sure to change the path to your .exr file
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+
+            // Step 2: Set the Scene's Environment
+            scene.environment = texture;
+
+            // Optional: If you want the HDR texture to affect the background as well
+            scene.background = texture;
+
+            hdrs.push(texture);
+            
+        });
+
+        exrLoader.load('hdr2.exr', function(texture) {
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            hdrs.push(texture);
+        });
+
+        exrLoader.load('hdr3.exr', function(texture) {
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            hdrs.push(texture);
+        });
+
+        if(sessionStorage.getItem('hdr')) {
+            scene.environment = hdrs[parseInt(sessionStorage.getItem('hdr'))];
+            scene.background = hdrs[parseInt(sessionStorage.getItem('hdr'))];
+        }
+
+        renderer.physicallyCorrectLights = true;
+        renderer.antialias = false;
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setAnimationLoop( animate );
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 0.1;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        document.body.appendChild(renderer.domElement);
+
+        if(sessionStorage.getItem('exposure')) {
+            renderer.toneMappingExposure = parseFloat(sessionStorage.getItem('exposure'));
+        }
+
+        // const controls = new OrbitControls(camera, renderer.domElement);
+        // controls.enableDamping = true;
+        // controls.enablePan = false;
+        // controls.enableZoom = false;
+        // controls.enableRotate = false;
+        // controls.target.set(0, 8, 25);
+
+        // let ground = new THREE.Mesh(
+        //     new THREE.PlaneGeometry(100, 100),
+        //     new THREE.MeshStandardMaterial({ color: 0x00ff00 })
+        // );
+        // ground.rotation.x = - Math.PI / 2;
+        // ground.receiveShadow = true;
+        // scene.add(ground);
+
+        function initSky() {
+
+            // Add Sky
+            sky = new Sky();
+            sky.scale.setScalar( 450000 );
+            scene.add( sky );
+
+            sun = new THREE.Vector3();
+
+            /// GUI
+
+            const effectController = {
+                turbidity: 0,
+                rayleigh: 0.25,
+                mieCoefficient: 0.005,
+                mieDirectionalG: 0.7,
+                elevation: 2,
+                azimuth: 180,
+                exposure: renderer.toneMappingExposure
+            };
+
+            function guiChanged() {
+
+                const uniforms = sky.material.uniforms;
+                uniforms[ 'turbidity' ].value = effectController.turbidity;
+                uniforms[ 'rayleigh' ].value = effectController.rayleigh;
+                uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
+                uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
+
+                const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
+                const theta = THREE.MathUtils.degToRad( effectController.azimuth );
+
+                sun.setFromSphericalCoords( 1, phi, theta );
+
+                uniforms[ 'sunPosition' ].value.copy( sun );
+
+                renderer.toneMappingExposure = effectController.exposure;
+                renderer.render( scene, camera );
+
+            }
+
+            const gui = new GUI();
+
+            gui.add( effectController, 'turbidity', 0.0, 20.0, 0.1 ).onChange( guiChanged );
+            gui.add( effectController, 'rayleigh', 0.0, 4, 0.001 ).onChange( guiChanged );
+            gui.add( effectController, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( guiChanged );
+            gui.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
+            gui.add( effectController, 'elevation', 0, 90, 0.1 ).onChange( guiChanged );
+            gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
+            gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
+
+            guiChanged();
+
+        }
+
+        // initSky();
+
+        // let sunLamp = new THREE.DirectionalLight(0xffffff, 1);
+        // sunLamp.position.set(0, 100, 0);
+        // sunLamp.castShadow = true;
+        // scene.add(sunLamp);
+
+        // let object;
+        // const loader = new GLTFLoader();
+        // loader.load('https://threejs.org/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb', function (gltf) {
+        //     scene.add(gltf.scene);
+        //     gltf.scene.position.y = 3;
+        //     object = gltf.scene;
+        // });
+
+        const waterGeometry = new THREE.PlaneGeometry(500, 1000, 1000, 1000);
+        
+        const textureLoader = new THREE.TextureLoader();
+        textureLoader.load('https://threejs.org/examples/textures/water.jpg', function(texture) {
+            texture.image.crossOrigin = "Anonymous"; // Ensure CORS policy compliance if necessary
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = texture.image.width;
+            canvas.height = texture.image.height;
+            context.drawImage(texture.image, 0, 0, texture.image.width, texture.image.height);
+            const imageData = context.getImageData(0, 0, texture.image.width, texture.image.height);
+        
+            // Step 2: Read Pixel Values and Displace Vertices
+            const positions = waterGeometry.attributes.position.array;
+            for (let i = 0; i < positions.length; i += 3) {
+                // Map the vertex position to the image pixel
+                const x = (positions[i] + 250) / 5000 * (texture.image.width - 1);
+                const y = (positions[i + 1] + 500) / 1000 * (texture.image.height - 1);
+                const pixelIndex = (Math.floor(y) * texture.image.width + Math.floor(x)) * 4;
+                const brightness = (imageData.data[pixelIndex] + imageData.data[pixelIndex + 1] + imageData.data[pixelIndex + 2]) / 3 / 255;
+                positions[i + 2] = brightness * 1; // Scale displacement as needed
+            }
+        
+            waterGeometry.attributes.position.needsUpdate = true;
+            waterGeometry.computeVertexNormals(); // Recompute normals for lighting
+        });
+
+        const water = new Water(waterGeometry, {
+            textureWidth: 256,
+            textureHeight: 256,
+            waterNormals: new THREE.TextureLoader().load('https://threejs.org/examples/textures/waternormals.jpg', function (texture) {
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+            }),
+            alpha: 0,
+            sunDirection: new THREE.Vector3(),
+            sunColor: 0x000000,
+            waterColor: 0x000000,
+            distortionScale: 100,
+            fog: scene.fog !== undefined
+        });
+
+        water.rotation.x = - Math.PI / 2;
+        water.position.y = -5;
+        water.position.x = 0;
+        scene.add(water);
+
+        const effectComposer = new EffectComposer(renderer);
+        effectComposer.addPass(new RenderPass(scene, camera));
+
+
+        let pixelPass = new RenderPixelatedPass(12, scene, camera);
+        effectComposer.addPass(pixelPass);
+
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight));
+        bloomPass.strength = 0.2;
+        bloomPass.radius = 1;
+        bloomPass.threshold = 10;
+        effectComposer.addPass(bloomPass);
+        
+
+        const outputPass = new OutputPass();
+        effectComposer.addPass(outputPass);
+
+        let lutPass = new LUTPass();
+        effectComposer.addPass(lutPass);
+
+        let lut;
+        let lutCubeLoader = new LUTCubeLoader();
+        lutCubeLoader.load('Bourbon 64.CUBE', function (result) {
+            lut = result;
+            lutPass.lut = lut.texture3D;
+        });
+
+        const bokehPass = new BokehPass(scene, camera, {
+            focus: 50,
+            aperture: 0.00005,
+            maxblur: 0.02,
+
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
+        effectComposer.addPass(bokehPass);
+
+        camera.position.z = -100;
+        camera.position.y = 5;
+        // camera.lookAt(10, 5, 0);
+        camera.rotation.y = -Math.PI * 0.9;
+        if(sessionStorage.getItem('cameraRotation')) {
+            camera.rotation.y = parseFloat(sessionStorage.getItem('cameraRotation'));
+        }
+        // sunLamp.target.position.set(0, 0, 0);
+        // sunLamp.target.updateMatrixWorld();
+
+        let time = 4.7;
+        // let time = 0;
+
+        let shouldSpin = false;
+        renderer.domElement.addEventListener('click', () => {
+            if(document.querySelector('#rotate .enabled').classList.contains('hidden')) {
+                shouldSpin = false;
+            } else {
+                shouldSpin = !shouldSpin;
+            }
+            sessionStorage.setItem('cameraRotation', camera.rotation.y);
+
+        });
+
+        const sounds = [
+            new Audio('sound/waves1.wav'),
+            new Audio('sound/waves2.wav'),
+            new Audio('sound/waves3.wav')
+        ];
+
+        let currentSound;
+        let volume = 0.5;
+        function playRandomSound() {
+            const randomIndex = Math.floor(Math.random() * sounds.length);
+            const sound = sounds[randomIndex];
+            currentSound = sound;
+            sound.volume = volume;
+            sound.play();
+
+            // When the sound ends, play the next one
+            // sound.onended = playRandomSound;
+        }
+
+        let canSwitch = false;
+        function switchHDR() {
+            const randomIndex = Math.floor(Math.random() * hdrs.length);
+            scene.environment = hdrs[randomIndex];
+            scene.background = hdrs[randomIndex];
+            sessionStorage.setItem('hdr', randomIndex);
+        }
+
+        function animate() {
+            if(currentSound) {
+                if(currentSound.currentTime >= (currentSound.duration*0.75)) {
+                    playRandomSound();
+                }
+            }
+            if(renderer.toneMappingExposure <= 0.00001) {
+                renderer.toneMappingExposure = 0.0001;
+                if(canSwitch) {
+                    switchHDR();
+                    canSwitch = false;
+                }
+            }
+            if(renderer.toneMappingExposure > 1) {
+                renderer.toneMappingExposure = 1;
+            }
+
+            if(renderer.toneMappingExposure > 0.1) {
+                canSwitch = true;
+            }
+
+            if(!moving && !document.querySelector('#freezeTime .enabled').classList.contains('hidden')) time += 0.005;
+            // controls.update();
+            water.material.uniforms['time'].value += 0.1 / 60.0;
+            // sky.material.uniforms['sunPosition'].value = sun;
+            // sunLamp.position.copy(sun);
+            // sunLamp.position.multiplyScalar(100);
+
+            const exposure = (Math.sin(time) + 1) / 10;
+            renderer.toneMappingExposure = exposure;
+            
+
+            if(shouldSpin) {
+                camera.rotation.y += 0.0005;
+            }
+
+            effectComposer.render();
+            // renderer.render(scene, camera);
+        }
+
+        window.addEventListener('click', () => {
+            playRandomSound();
+            // backgroundAmbience.play();
+        }, { once: true });
+
+        window.onresize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            effectComposer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        let exposureTimeout;
+        let scrollDirection = 0;
+        window.addEventListener('wheel', function(event) {
+            clearTimeout(exposureTimeout);
+            if (event.deltaY < 0) {
+                scrollDirection = -1;
+                moving = true;
+            } else if (event.deltaY > 0) {
+                scrollDirection = 1;
+                moving = true;
+            }
+            moving = false;
+            time += scrollDirection * 0.02;
+            
+            exposureTimeout = setTimeout(() => {
+                sessionStorage.setItem('exposure', renderer.toneMappingExposure);
+            }, 500);
+        });
+
+        let startY = 0; // Starting Y position of touch
+        let moving = false; // Flag to track if touch movement is happening
+
+        window.addEventListener('touchstart', function(event) {
+            startY = event.touches[0].clientY; // Record the starting Y position
+            moving = true;
+
+        });
+
+        window.addEventListener('touchmove', function(event) {
+            if (moving) {
+                const currentY = event.touches[0].clientY;
+                const diffY = startY - currentY; // Calculate the difference from the start position
+
+                // Determine the direction of the scroll
+                const scrollDirection = diffY > 0 ? 1 : -1;
+
+                // Adjust toneMappingExposure based on the direction
+                time += scrollDirection * 0.05;
+                // renderer.toneMappingExposure = Math.max(0, Math.min(renderer.toneMappingExposure, 1)); // Clamp the value between 0 and 1
+
+                startY = currentY; // Update startY to the current position for smooth continuous adjustment
+            }
+            event.preventDefault(); // Prevent the default scroll behavior
+        }, { passive: false });
+
+        window.addEventListener('touchend', function(event) {
+            moving = false; // Reset moving flag on touch end
+            sessionStorage.setItem('exposure', renderer.toneMappingExposure);
+        });
+
+    </script>
+</body>
+</html>
