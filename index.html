@@ -325,7 +325,10 @@
             background: transparent;
             z-index: 1;
             color: white;
-            user-select: none;
+            -webkit-user-select: none; /* Safari 3.1+ */
+            -moz-user-select: none;    /* Firefox 2+ */
+            -ms-user-select: none;     /* Internet Explorer 10+ */
+            user-select: none;   
         }
 
         #rotateControllers div {
@@ -338,6 +341,10 @@
             opacity: 0.25;
             font-size: 2rem;
             padding-bottom: 30vh;
+            -webkit-user-select: none; /* Safari 3.1+ */
+            -moz-user-select: none;    /* Firefox 2+ */
+            -ms-user-select: none;     /* Internet Explorer 10+ */
+            user-select: none;   
             transition: all 0.2s;
         }
 
