@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="introText"><h1>Click to Listen</h1><h1>Scroll/Swipe to change time.</h1><h1>Take a look around.</h1></div>
+    <div id="introText"><h1>Click to Listen.</h1><h1>Scroll/Swipe to change time.</h1><h1>Take a look around.</h1></div>
     <div id="drawer" class="slideIn">
         <div id="handle" style="opacity: 1;">vvvv</div>
         <section id="toolbar">
@@ -187,18 +187,20 @@
 
         #introText {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top:0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
             color: white;
-            font-size: 1rem;
+            font-size: 0.5rem;
             z-index: 100;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            line-height: 4;
-            animation: fadeOut 15s forwards;
+            line-height: 2;
+            animation: fadeOut 10s forwards;
             pointer-events: none;
             user-select: none;
         }
@@ -592,7 +594,7 @@
         effectComposer.addPass(new RenderPass(scene, camera));
 
 
-        let pixelPass = new RenderPixelatedPass(3, scene, camera);
+        let pixelPass = new RenderPixelatedPass(5, scene, camera);
         effectComposer.addPass(pixelPass);
 
         const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth/2, window.innerHeight/2));
