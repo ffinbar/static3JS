@@ -464,7 +464,7 @@
         // document.body.appendChild(stats.dom);
 
         const exrLoader = new EXRLoader(); // Changed to EXRLoader
-        exrLoader.setDataType(THREE.FloatType); // EXR is typically used with FloatType for higher quality
+        exrLoader.setDataType(THREE.HalfFloatType); // EXR is typically used with FloatType for higher quality
         exrLoader.load('hdr.exr', function(texture) { // Make sure to change the path to your .exr file
             texture.mapping = THREE.EquirectangularReflectionMapping;
 
