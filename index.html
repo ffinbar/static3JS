@@ -90,7 +90,7 @@
             drawer.classList.add('slideOut');
             drawer.classList.remove('slideIn');
 
-            handle.textContent = 'vvvv';
+            handle.textContent = '^^^^';
             handle.style.opacity = 0.25;
             handle.style.background = 'none';
 
@@ -112,7 +112,7 @@
             drawer.classList.remove('slideOut');
             drawer.classList.add('slideIn');
 
-            handle.textContent = '^^^^';
+            handle.textContent = 'vvvv';
             handle.style.opacity = 1;
             handle.style.background = 'rgba(0, 0, 0, 0.75)';
 
@@ -238,6 +238,8 @@
             background: rgba(0, 0, 0, 0.5);
             color: white;
             text-align: center;
+            font-size: 1.5rem;
+            line-height: 0.5;
             padding: 0.5rem;
             cursor: pointer;
             width: 100%;
@@ -322,9 +324,11 @@
         }
 
         .resting {
-            padding-bottom: 10vh !important;
+            padding-bottom: 1rem !important;
             background: transparent !important;
         }
+
+
     </style>
     <script type="importmap">
         {
@@ -781,6 +785,7 @@
                 clearTimeout(movementTimeout);
                 left.classList.remove('resting');
                 right.classList.remove('resting');
+                left.style.opacity = 1;
             });
 
             right.addEventListener('touchstart', () => {
@@ -791,12 +796,13 @@
                 clearTimeout(movementTimeout);
                 left.classList.remove('resting');
                 right.classList.remove('resting');
+                right.style.opacity = 1;
             });
 
             left.addEventListener('touchend', () => {
                 rotateLeft = false;
                 sessionStorage.setItem('cameraRotation', camera.rotation.y);
-                left.style.opacity = 0.25;
+                left.style.opacity = '0.25';
                 movementTimeout = setTimeout(() => {
                     if(drawer.classList.contains('slideOut')) {
                         right.classList.add('resting');
@@ -808,7 +814,7 @@
             right.addEventListener('touchend', () => {
                 rotateRight = false;
                 sessionStorage.setItem('cameraRotation', camera.rotation.y);
-                right.style.opacity = 0.25;
+                right.style.opacity = '0.25';
                 movementTimeout = setTimeout(() => {
                     if(drawer.classList.contains('slideOut')) {
                         right.classList.add('resting');
