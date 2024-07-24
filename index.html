@@ -32,7 +32,7 @@
                 </div>
             </button>
             <button id="freezeTime">
-                <p class="hidden">Pauses time progression.</p>
+                <p class="hidden">Pauses time progression. <br>You can swipe/scroll to adjust time.</p>
                 <div class="enabled">
                     <b>Pause Time</b>
                     <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#e8eaed"><path d="M523.33-200v-560H760v560H523.33ZM200-200v-560h236.67v560H200Zm390-66.67h103.33v-426.66H590v426.66Zm-323.33 0H370v-426.66H266.67v426.66Zm0-426.66v426.66-426.66Zm323.33 0v426.66-426.66Z"/></svg>            </div>
@@ -47,17 +47,105 @@
         </section>
     </div>
 
+    <section id="rotateControllers">
+        <div id="left" class="opacityPulse"><p class="hidden">Rotate camera left</p>&lt;</div>
+        <div id="right" class="opacityPulse"><p class="hidden">Rotate camera right</p>&gt;</div>
+    </section>
+
     <script>
-        let handle = document.getElementById('handle');
+        handle = document.getElementById('handle');
 
-        handle.addEventListener('click', () => {
-            document.getElementById('drawer').classList.toggle('slideOut');
-            document.getElementById('drawer').classList.toggle('slideIn');
+        left = document.getElementById('left');
+        right = document.getElementById('right');
+        drawer = document.getElementById('drawer');
 
-            handle.textContent = document.getElementById('drawer').classList.contains('slideOut') ? '^^^^' : 'vvvv';
-            handle.style.opacity = document.getElementById('drawer').classList.contains('slideOut') ? 0.25 : 1;
-            handle.style.background = document.getElementById('drawer').classList.contains('slideOut') ? 'none' : 'rgba(0, 0, 0, 0.75)';
+        rotateControllers = document.getElementById('rotateControllers');
+
+
+        function toggleHandle() {
+            drawer.classList.toggle('slideOut');
+            drawer.classList.toggle('slideIn');
+
+            handle.textContent = drawer.classList.contains('slideOut') ? '^^^^' : 'vvvv';
+            handle.style.opacity = drawer.classList.contains('slideOut') ? 0.25 : 1;
+            handle.style.background = drawer.classList.contains('slideOut') ? 'none' : 'rgba(0, 0, 0, 0.75)';
+
+            left.classList.remove('resting');
+            right.classList.remove('resting');
+        
+            if(drawer.classList.contains('slideIn')) {
+                left.style.opacity = 1;
+                right.style.opacity = 1;
+            } else {
+                left.style.opacity = '';
+                right.style.opacity = '';
+                let buttonPs = document.querySelectorAll('p');
+                buttonPs.forEach(p => {
+                    p.classList.add('hidden');
+                });
+            }
+        }
+
+        function closeHandle() {
+            drawer.classList.add('slideOut');
+            drawer.classList.remove('slideIn');
+
+            handle.textContent = 'vvvv';
+            handle.style.opacity = 0.25;
+            handle.style.background = 'none';
+
+            let buttonPs = document.querySelectorAll('p');
+            buttonPs.forEach(p => {
+                p.classList.add('hidden');
+            });
+
+            if(drawer.classList.contains('slideIn')) {
+                left.style.opacity = 1;
+                right.style.opacity = 1;
+            } else {
+                left.style.opacity = '';
+                right.style.opacity = '';
+            }
+        }
+
+        function openHandle() {
+            drawer.classList.remove('slideOut');
+            drawer.classList.add('slideIn');
+
+            handle.textContent = '^^^^';
+            handle.style.opacity = 1;
+            handle.style.background = 'rgba(0, 0, 0, 0.75)';
+
+            left.classList.remove('resting');
+            right.classList.remove('resting');
+        }
+
+        handle.addEventListener('click', toggleHandle);
+
+
+        left.addEventListener('click', () => {
+            if(drawer.classList.contains('slideIn')) {
+                closeHandle();
+            }
+            left.classList.remove('opacityPulse');
+            right.classList.remove('opacityPulse');
         });
+
+        right.addEventListener('click', () => {
+            if(drawer.classList.contains('slideIn')) {
+                closeHandle();
+            }
+            left.classList.remove('opacityPulse');
+            right.classList.remove('opacityPulse');
+        });
+
+
+        rotateControllers.addEventListener('click', () => {
+            if(drawer.classList.contains('slideIn')) {
+                closeHandle();
+            }
+        });
+
     </script>
 
     <style>
@@ -78,6 +166,7 @@
             bottom: 0;
             left: 0;
             right: 0;
+            z-index: 100;
         }
 
         #toolbar p {
@@ -87,24 +176,14 @@
         }
 
         #toolbar {
-            
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 1rem;
             padding: 1rem;
             background: rgba(0, 0, 0, 0.5);
             z-index: 100;
             color: white;
-        }
-
-        #toolbar {
-            display: flex;
-            justify-content: space-around;
-            gap: 1rem;
-        }
-
-        @media (max-width: 768px) {
-            #toolbar {
-                flex-direction: column;
-                gap: 1rem;
-            }
         }
 
         #toolbar button {
@@ -114,7 +193,7 @@
             color: white;
             font-size: 1rem;
             transition: all 0.2s;
-
+            width: 30%;
         }
 
         button div, #toolbar button {
@@ -178,6 +257,74 @@
             animation: slideIn 1s forwards;
         }
 
+        #rotateControllers {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 0;
+            padding: 0;
+            background: transparent;
+            z-index: 1;
+            color: white;
+            user-select: none;
+        }
+
+        #rotateControllers div {
+            width: 25%;
+            height: 100%;
+            /* background: rgba(0, 0, 0, 0.5); */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0.25;
+            font-size: 2rem;
+            padding-bottom: 30vh;
+            transition: all 0.2s;
+        }
+
+        #rotateControllers div p {
+            font-size: 1rem;
+        }
+
+        #rotateControllers div:hover {
+            opacity: 1;
+        }
+
+        @keyframes opacityPulse {
+            from {
+                opacity: 0.25;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .opacityPulse {
+            animation: opacityPulse 5s infinite alternate;
+        }
+
+        #right {
+            cursor: e-resize;
+            background-image: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.8));
+            align-items: flex-end;
+            padding-right: 2rem;
+        }
+
+        #left {
+            cursor: w-resize;
+            background-image: linear-gradient(to left, transparent, rgba(0, 0, 0, 0.8));
+            align-items: flex-start;
+            padding-left: 2rem;
+        }
+
+        .resting {
+            padding-bottom: 10vh !important;
+            background: transparent !important;
+        }
     </style>
     <script type="importmap">
         {
@@ -190,10 +337,10 @@
     <script type="module">
 
         // const rotate = document.getElementById('rotate');
-        const mute = document.getElementById('mute');
-        const freezeTime = document.getElementById('freezeTime');
-        const info = document.getElementById('info');
-        const toolbar = document.getElementById('toolbar');
+        let mute = document.getElementById('mute');
+        let freezeTime = document.getElementById('freezeTime');
+        let info = document.getElementById('info');
+        let toolbar = document.getElementById('toolbar');
 
         // rotate.addEventListener('click', () => {
         //     rotate.querySelector('.enabled').classList.toggle('hidden');
@@ -219,7 +366,7 @@
         });
 
         info.addEventListener('click', () => {
-            let buttonPs = toolbar.querySelectorAll('p');
+            let buttonPs = document.querySelectorAll('p');
             buttonPs.forEach(p => {
                 p.classList.toggle('hidden');
             });
@@ -240,7 +387,7 @@
         import { LUTPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/LUTPass.js';
         import { LUTCubeLoader } from 'https://unpkg.com/three/examples/jsm/loaders/LUTCubeLoader.js';
         import { RenderPixelatedPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/RenderPixelatedPass.js';
-
+        import Stats from 'https://unpkg.com/three/examples/jsm/libs/stats.module.js';
         
         let sky, sun
 
@@ -250,6 +397,10 @@
         scene.add(camera);
 
         let hdrs = []
+
+        // let stats = new Stats();
+        // stats.showPanel(0);
+        // document.body.appendChild(stats.dom);
 
         const exrLoader = new EXRLoader(); // Changed to EXRLoader
         exrLoader.setDataType(THREE.FloatType); // EXR is typically used with FloatType for higher quality
@@ -298,7 +449,7 @@
 
         renderer.physicallyCorrectLights = true;
         renderer.antialias = false;
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(window.devicePixelRatio/3);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setAnimationLoop( animate );
         renderer.shadowMap.enabled = true;
@@ -308,39 +459,10 @@
         renderer.outputEncoding = THREE.sRGBEncoding;
         document.body.appendChild(renderer.domElement);
 
+
         if(sessionStorage.getItem('exposure')) {
             renderer.toneMappingExposure = parseFloat(sessionStorage.getItem('exposure'));
         }
-
-        // const controls = new OrbitControls(camera, renderer.domElement);
-        // controls.enableDamping = true;
-        // controls.enablePan = false;
-        // controls.enableZoom = false;
-        // controls.enableRotate = false;
-        // controls.target.set(0, 8, 25);
-
-        // let ground = new THREE.Mesh(
-        //     new THREE.PlaneGeometry(100, 100),
-        //     new THREE.MeshStandardMaterial({ color: 0x00ff00 })
-        // );
-        // ground.rotation.x = - Math.PI / 2;
-        // ground.receiveShadow = true;
-        // scene.add(ground);
-
-        // initSky();
-
-        // let sunLamp = new THREE.DirectionalLight(0xffffff, 1);
-        // sunLamp.position.set(0, 100, 0);
-        // sunLamp.castShadow = true;
-        // scene.add(sunLamp);
-
-        // let object;
-        // const loader = new GLTFLoader();
-        // loader.load('https://threejs.org/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb', function (gltf) {
-        //     scene.add(gltf.scene);
-        //     gltf.scene.position.y = 3;
-        //     object = gltf.scene;
-        // });
 
         const waterGeometry = new THREE.PlaneGeometry(500, 1000, 1000, 1000);
         
@@ -392,15 +514,14 @@
         effectComposer.addPass(new RenderPass(scene, camera));
 
 
-        let pixelPass = new RenderPixelatedPass(12, scene, camera);
+        let pixelPass = new RenderPixelatedPass(4, scene, camera);
         effectComposer.addPass(pixelPass);
 
-        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight));
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth/2, window.innerHeight/2));
         bloomPass.strength = 0.2;
-        bloomPass.radius = 1;
+        bloomPass.radius = 0.5;
         bloomPass.threshold = 15;
         effectComposer.addPass(bloomPass);
-        
 
         const outputPass = new OutputPass();
         effectComposer.addPass(outputPass);
@@ -478,7 +599,11 @@
             water.material.uniforms['distortionScale'].value = Math.random() * 90 + 10;
         }
 
+        let rotateLeft = false;
+        let rotateRight = false;
+
         function animate() {
+            // stats.begin();
             if(currentSound) {
                 if(currentSound.currentTime >= (currentSound.duration*0.75)) {
                     playRandomSound();
@@ -510,12 +635,11 @@
             renderer.toneMappingExposure = exposure;
             
 
-            if(shouldSpin) {
-                camera.rotation.y += 0.0005;
-            }
+            camera.rotation.y += rotateLeft ? 0.005 : rotateRight ? -0.005 : 0;
 
             effectComposer.render();
             // renderer.render(scene, camera);
+            // stats.end();
         }
 
         window.addEventListener('click', () => {
@@ -533,45 +657,30 @@
         let exposureTimeout;
         let scrollDirection = 0;
         window.addEventListener('wheel', function(event) {
-        event.preventDefault();
-        clearTimeout(exposureTimeout);
+            event.preventDefault();
+            clearTimeout(exposureTimeout);
 
-        // Define thresholds for vertical and horizontal scrolling
-        const verticalThreshold = 1; // Adjust as needed
-        const horizontalThreshold = 1; // Adjust as needed
+            // Accumulate deltas
+            scrollDirection += event.deltaY;
+            let horizontalScroll = event.deltaX;
 
-        // Accumulate deltas
-        scrollDirection += event.deltaY;
-        let horizontalScroll = event.deltaX;
-
-        // Check vertical scroll threshold
-        // if (Math.abs(scrollDirection) > verticalThreshold) {
-        //     if (scrollDirection < 0) {
-        //         moving = true;
-        //     } else if (scrollDirection > 0) {
-        //         moving = true;
-        //     }
-        //     // Reset scrollDirection after moving
-        //     scrollDirection = 0;
-        // }
-
-        // Check horizontal scroll threshold
-        if (Math.abs(horizontalScroll) > horizontalThreshold) {
-            if(horizontalScroll > 0) {
-                camera.rotation.y += 0.01;
-            } else if(horizontalScroll < 0) {
-                camera.rotation.y -= 0.01;
+            // Check vertical scroll threshold
+            if (scrollDirection < 0) {
+                moving = true;
+            } else if (scrollDirection > 0) {
+                moving = true;
             }
-            // Consider resetting horizontalScroll if needed
-        }
+            
+            moving = false;
+            time += scrollDirection * 0.002;
 
-        moving = false;
-        // time += scrollDirection * 0.02;
+            // Reset scrollDirection after moving
+            scrollDirection = 0;
 
-        exposureTimeout = setTimeout(() => {
-        sessionStorage.setItem('exposure', renderer.toneMappingExposure);
-    }, 500);
-}, { passive: false });
+            exposureTimeout = setTimeout(() => {
+                sessionStorage.setItem('exposure', renderer.toneMappingExposure);
+            }, 500);
+        }, { passive: false });
 
         let startY = 0; // Starting Y position of touch
         let moving = false; // Flag to track if touch movement is happening
@@ -603,6 +712,111 @@
             moving = false; // Reset moving flag on touch end
             sessionStorage.setItem('exposure', renderer.toneMappingExposure);
         });
+
+        let movementTimeout;
+
+        function prefersTouchEvents() {
+            const prefersTouch = window.matchMedia("(hover: none)").matches; // Check if the device does not support hover
+            const supportsTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0; // Check if touch events are supported
+
+            return prefersTouch || supportsTouch;
+        }
+
+        // if (prefersTouchEvents()) {
+        //     console.log("Device prefers touch events.");
+        // } else {
+        //     console.log("Device prefers mouse events or supports hover.");
+        // }
+
+        if(!prefersTouchEvents()) {
+
+            left.addEventListener('mouseenter', () => {
+                rotateLeft = true;
+                if(left.classList.contains('opacityPulse')) {
+                    left.classList.remove('opacityPulse');
+                }
+                clearTimeout(movementTimeout);
+                left.classList.remove('resting');
+                right.classList.remove('resting');
+            });
+
+            right.addEventListener('mouseenter', () => {
+                rotateRight = true;
+                if(right.classList.contains('opacityPulse')) {
+                    right.classList.remove('opacityPulse');
+                }
+                clearTimeout(movementTimeout);
+                left.classList.remove('resting');
+                right.classList.remove('resting');
+            });
+
+            left.addEventListener('mouseleave', () => {
+                rotateLeft = false;
+                sessionStorage.setItem('cameraRotation', camera.rotation.y);
+                movementTimeout = setTimeout(() => {
+                    if(drawer.classList.contains('slideOut')) {
+                        left.classList.add('resting');
+                        right.classList.add('resting');
+                    }
+                }, 5000);
+            });
+
+            right.addEventListener('mouseleave', () => {
+                rotateRight = false;
+                sessionStorage.setItem('cameraRotation', camera.rotation.y);
+                movementTimeout = setTimeout(() => {
+                    if(drawer.classList.contains('slideOut')) {
+                        left.classList.add('resting');
+                        right.classList.add('resting');
+                    }
+                }, 5000);
+            });
+
+        } else {
+            left.addEventListener('touchstart', () => {
+                rotateLeft = true;
+                if(left.classList.contains('opacityPulse')) {
+                    left.classList.remove('opacityPulse');
+                }
+                clearTimeout(movementTimeout);
+                left.classList.remove('resting');
+                right.classList.remove('resting');
+            });
+
+            right.addEventListener('touchstart', () => {
+                rotateRight = true;
+                if(right.classList.contains('opacityPulse')) {
+                    right.classList.remove('opacityPulse');
+                }
+                clearTimeout(movementTimeout);
+                left.classList.remove('resting');
+                right.classList.remove('resting');
+            });
+
+            left.addEventListener('touchend', () => {
+                rotateLeft = false;
+                sessionStorage.setItem('cameraRotation', camera.rotation.y);
+                left.style.opacity = 0.25;
+                movementTimeout = setTimeout(() => {
+                    if(drawer.classList.contains('slideOut')) {
+                        right.classList.add('resting');
+                        left.classList.add('resting');
+                    }
+                }, 5000);
+            });
+
+            right.addEventListener('touchend', () => {
+                rotateRight = false;
+                sessionStorage.setItem('cameraRotation', camera.rotation.y);
+                right.style.opacity = 0.25;
+                movementTimeout = setTimeout(() => {
+                    if(drawer.classList.contains('slideOut')) {
+                        right.classList.add('resting');
+                        left.classList.add('resting');
+                    }
+                }, 5000);
+            });
+        }
 
     </script>
 </body>
