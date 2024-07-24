@@ -146,6 +146,29 @@
             }
         });
 
+        let cursorHideTimeout;
+
+        function hideCursor() {
+            document.body.style.cursor = 'none';
+        }
+
+        function resetCursorHideTimeout() {
+            // Show the cursor in case it was hidden
+            document.body.style.cursor = '';
+
+            // Clear any existing timeout to prevent hiding the cursor prematurely
+            clearTimeout(cursorHideTimeout);
+
+            // Set a new timeout to hide the cursor after 2000 milliseconds (2 seconds) of inactivity
+            cursorHideTimeout = setTimeout(hideCursor, 2000);
+        }
+
+        // Listen for mouse movement on the entire document
+        document.addEventListener('mousemove', resetCursorHideTimeout);
+
+        // Initialize the timeout process when the script loads
+        resetCursorHideTimeout();
+
     </script>
 
     <style>
@@ -392,11 +415,13 @@
         import { LUTCubeLoader } from 'https://unpkg.com/three/examples/jsm/loaders/LUTCubeLoader.js';
         import { RenderPixelatedPass } from 'https://unpkg.com/three/examples/jsm/postprocessing/RenderPixelatedPass.js';
         import Stats from 'https://unpkg.com/three/examples/jsm/libs/stats.module.js';
-        
+        import { FontLoader } from 'https://unpkg.com/three/examples/jsm/loaders/FontLoader.js';
+        import { TextGeometry } from 'https://cdn.jsdelivr.net/npm/three/examples/jsm/geometries/TextGeometry.js';
+
         let sky, sun
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 10000);
+        const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
         scene.add(camera);
 
@@ -468,36 +493,36 @@
             renderer.toneMappingExposure = parseFloat(sessionStorage.getItem('exposure'));
         }
 
-        const waterGeometry = new THREE.PlaneGeometry(500, 1000, 1000, 1000);
+        const waterGeometry = new THREE.CircleGeometry(300, 64);
         
         const textureLoader = new THREE.TextureLoader();
-        textureLoader.load('https://threejs.org/examples/textures/water.jpg', function(texture) {
-            texture.image.crossOrigin = "Anonymous"; // Ensure CORS policy compliance if necessary
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = texture.image.width;
-            canvas.height = texture.image.height;
-            context.drawImage(texture.image, 0, 0, texture.image.width, texture.image.height);
-            const imageData = context.getImageData(0, 0, texture.image.width, texture.image.height);
+        // textureLoader.load('https://threejs.org/examples/textures/water.jpg', function(texture) {
+        //     texture.image.crossOrigin = "Anonymous"; // Ensure CORS policy compliance if necessary
+        //     const canvas = document.createElement('canvas');
+        //     const context = canvas.getContext('2d');
+        //     canvas.width = texture.image.width;
+        //     canvas.height = texture.image.height;
+        //     context.drawImage(texture.image, 0, 0, texture.image.width, texture.image.height);
+        //     const imageData = context.getImageData(0, 0, texture.image.width, texture.image.height);
         
-            // Step 2: Read Pixel Values and Displace Vertices
-            const positions = waterGeometry.attributes.position.array;
-            for (let i = 0; i < positions.length; i += 3) {
-                // Map the vertex position to the image pixel
-                const x = (positions[i] + 250) / 5000 * (texture.image.width - 1);
-                const y = (positions[i + 1] + 500) / 1000 * (texture.image.height - 1);
-                const pixelIndex = (Math.floor(y) * texture.image.width + Math.floor(x)) * 4;
-                const brightness = (imageData.data[pixelIndex] + imageData.data[pixelIndex + 1] + imageData.data[pixelIndex + 2]) / 3 / 255;
-                positions[i + 2] = brightness * 1; // Scale displacement as needed
-            }
+        //     // Step 2: Read Pixel Values and Displace Vertices
+        //     const positions = waterGeometry.attributes.position.array;
+        //     for (let i = 0; i < positions.length; i += 3) {
+        //         // Map the vertex position to the image pixel
+        //         const x = (positions[i] + 250) / 500 * (texture.image.width - 1);
+        //         const y = (positions[i + 1] + 250) / 500 * (texture.image.height - 1);
+        //         const pixelIndex = (Math.floor(y) * texture.image.width + Math.floor(x)) * 4;
+        //         const brightness = (imageData.data[pixelIndex] + imageData.data[pixelIndex + 1] + imageData.data[pixelIndex + 2]) / 3 / 255;
+        //         positions[i + 2] = brightness * 1; // Scale displacement as needed
+        //     }
         
-            waterGeometry.attributes.position.needsUpdate = true;
-            waterGeometry.computeVertexNormals(); // Recompute normals for lighting
-        });
+        //     waterGeometry.attributes.position.needsUpdate = true;
+        //     waterGeometry.computeVertexNormals(); // Recompute normals for lighting
+        // });
 
         const water = new Water(waterGeometry, {
-            textureWidth: 256,
-            textureHeight: 256,
+            textureWidth: 300,
+            textureHeight: 300,
             waterNormals: new THREE.TextureLoader().load('https://threejs.org/examples/textures/waternormals.jpg', function (texture) {
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
             }),
@@ -505,20 +530,76 @@
             sunDirection: new THREE.Vector3(),
             sunColor: 0x000000,
             waterColor: 0x000000,
-            distortionScale: 1,
+            distortionScale: 0,
             fog: scene.fog !== undefined
         });
 
         water.rotation.x = - Math.PI / 2;
         water.position.y = -5;
         water.position.x = 0;
+        water.position.z = 0;
+        water.receiveShadow = true;
         scene.add(water);
+
+        let fontloader = new FontLoader();
+        let font;
+        let text;
+        let icosphere = null;
+        fontloader.load('volk.json', function(font) {
+            let textGeometry = new TextGeometry('Fin.', {
+                font: font,
+                size: 4,
+                depth: 1,
+                curveSegments: 12,
+                bevelEnabled: true,
+                bevelThickness: 1,
+                bevelSize: 0,
+                bevelOffset: 0,
+                bevelSegments: 5
+            });
+
+            let textMaterial = new THREE.MeshPhysicalMaterial({ 
+                color: 0xffffff,
+                metalness: 1,
+                roughness: 0,
+             });
+
+            text = new THREE.Mesh(textGeometry, textMaterial);
+            text.position.set(camera.position.x -50, -5, camera.position.z - 30);
+            let target = new THREE.Vector3(camera.position.x, -5, camera.position.z);
+            text.lookAt(target);
+            console.log(camera.position);
+            text.castShadow = true;
+            scene.add(text);
+
+            let icosphereGeometry = new THREE.IcosahedronGeometry(2, 0);
+            let icosphereMaterial = new THREE.MeshPhysicalMaterial({ 
+                color: 0xffffff,
+                metalness: 1,
+                roughness: 0,
+             });
+            icosphere = new THREE.Mesh(icosphereGeometry, icosphereMaterial);
+            icosphere.position.set(camera.position.x - 55, -3, camera.position.z - 30);
+            icosphere.lookAt(camera.position);
+            icosphere.castShadow = true;
+            scene.add(icosphere);
+
+            const bokehPass = new BokehPass(scene, camera, {
+                focus: camera.position.distanceTo(text.position),
+                aperture: 0.0002,
+                maxblur: 0.02,
+
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+            effectComposer.addPass(bokehPass);
+        });
 
         const effectComposer = new EffectComposer(renderer);
         effectComposer.addPass(new RenderPass(scene, camera));
 
 
-        let pixelPass = new RenderPixelatedPass(4, scene, camera);
+        let pixelPass = new RenderPixelatedPass(3, scene, camera);
         effectComposer.addPass(pixelPass);
 
         const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth/2, window.innerHeight/2));
@@ -540,18 +621,10 @@
             lutPass.lut = lut.texture3D;
         });
 
-        const bokehPass = new BokehPass(scene, camera, {
-            focus: 50,
-            aperture: 0.00005,
-            maxblur: 0.02,
+       
 
-            width: window.innerWidth,
-            height: window.innerHeight
-        });
-        effectComposer.addPass(bokehPass);
-
-        camera.position.z = -100;
-        camera.position.y = 5;
+        camera.position.z = 0;
+        camera.position.y = 0;
         // camera.lookAt(10, 5, 0);
         camera.rotation.y = -Math.PI * 0.9;
         if(sessionStorage.getItem('cameraRotation')) {
@@ -560,7 +633,7 @@
         // sunLamp.target.position.set(0, 0, 0);
         // sunLamp.target.updateMatrixWorld();
 
-        let time = 4.7;
+        let time = 5;
         // let time = 0;
 
         let shouldSpin = false;
@@ -599,8 +672,8 @@
             scene.environment = hdrs[randomIndex];
             scene.background = hdrs[randomIndex];
             sessionStorage.setItem('hdr', randomIndex);
-            //set water distortion scale to random value from 10 to 100
-            water.material.uniforms['distortionScale'].value = Math.random() * 90 + 10;
+            //set water distortion scale to random value from 0 to 100
+            water.material.uniforms['distortionScale'].value = Math.random() * 50;
         }
 
         let rotateLeft = false;
@@ -626,6 +699,12 @@
 
             if(renderer.toneMappingExposure > 0.1) {
                 canSwitch = true;
+            }
+
+            if(icosphere) {
+                icosphere.rotation.y += 0.01;
+                icosphere.rotation.x += 0.01;
+                icosphere.rotation.z += 0.01;
             }
 
             if(!moving && !document.querySelector('#freezeTime .enabled').classList.contains('hidden')) time += 0.002;
