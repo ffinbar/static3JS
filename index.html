@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="introText"><h1>Click to Listen</h1><h1>Scroll/Swipe to change time.</h1><h1>Take a look around.</h1></div>
     <div id="drawer" class="slideIn">
         <div id="handle" style="opacity: 1;">vvvv</div>
         <section id="toolbar">
@@ -182,6 +183,33 @@
         html {
             background: black;
             font-family: 'Arial', sans-serif;
+        }
+
+        #introText {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1rem;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 4;
+            animation: fadeOut 15s forwards;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
         }
 
         #drawer {
@@ -420,6 +448,8 @@
 
         let sky, sun
 
+        let clock = new THREE.Clock();
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
@@ -545,55 +575,18 @@
         let font;
         let text;
         let icosphere = null;
-        fontloader.load('volk.json', function(font) {
-            let textGeometry = new TextGeometry('Fin.', {
-                font: font,
-                size: 4,
-                depth: 1,
-                curveSegments: 12,
-                bevelEnabled: true,
-                bevelThickness: 1,
-                bevelSize: 0,
-                bevelOffset: 0,
-                bevelSegments: 5
+
+        let icosphereGeometry = new THREE.IcosahedronGeometry(3, 0);
+        let icosphereMaterial = new THREE.MeshPhysicalMaterial({ 
+            color: 0xffffff,
+            metalness: 1,
+            roughness: 0,
             });
-
-            let textMaterial = new THREE.MeshPhysicalMaterial({ 
-                color: 0xffffff,
-                metalness: 1,
-                roughness: 0,
-             });
-
-            text = new THREE.Mesh(textGeometry, textMaterial);
-            text.position.set(camera.position.x -50, -5, camera.position.z - 30);
-            let target = new THREE.Vector3(camera.position.x, -5, camera.position.z);
-            text.lookAt(target);
-            console.log(camera.position);
-            text.castShadow = true;
-            scene.add(text);
-
-            let icosphereGeometry = new THREE.IcosahedronGeometry(2, 0);
-            let icosphereMaterial = new THREE.MeshPhysicalMaterial({ 
-                color: 0xffffff,
-                metalness: 1,
-                roughness: 0,
-             });
-            icosphere = new THREE.Mesh(icosphereGeometry, icosphereMaterial);
-            icosphere.position.set(camera.position.x - 55, -3, camera.position.z - 30);
-            icosphere.lookAt(camera.position);
-            icosphere.castShadow = true;
-            scene.add(icosphere);
-
-            const bokehPass = new BokehPass(scene, camera, {
-                focus: camera.position.distanceTo(text.position),
-                aperture: 0.0002,
-                maxblur: 0.02,
-
-                width: window.innerWidth,
-                height: window.innerHeight
-            });
-            effectComposer.addPass(bokehPass);
-        });
+        icosphere = new THREE.Mesh(icosphereGeometry, icosphereMaterial);
+        icosphere.position.set(-50, -2, -27);
+        icosphere.lookAt(camera.position);
+        icosphere.castShadow = true;
+        scene.add(icosphere);
 
         const effectComposer = new EffectComposer(renderer);
         effectComposer.addPass(new RenderPass(scene, camera));
@@ -622,6 +615,15 @@
         });
 
        
+        const bokehPass = new BokehPass(scene, camera, {
+            focus: camera.position.distanceTo(icosphere.position),
+            aperture: 0.0002,
+            maxblur: 0.02,
+
+            width: window.innerWidth,
+            height: window.innerHeight
+        });
+        effectComposer.addPass(bokehPass);
 
         camera.position.z = 0;
         camera.position.y = 0;
@@ -680,6 +682,7 @@
         let rotateRight = false;
 
         function animate() {
+            let delta = clock.getDelta();
             // stats.begin();
             if(currentSound) {
                 if(currentSound.currentTime >= (currentSound.duration*0.75)) {
@@ -702,14 +705,14 @@
             }
 
             if(icosphere) {
-                icosphere.rotation.y += 0.01;
-                icosphere.rotation.x += 0.01;
-                icosphere.rotation.z += 0.01;
+                icosphere.rotation.y += 0.2 * delta;
+                icosphere.rotation.x += 0.2 * delta;
+                icosphere.rotation.z += 0.2 * delta;
             }
 
             if(!moving && !document.querySelector('#freezeTime .enabled').classList.contains('hidden')) time += 0.002;
             // controls.update();
-            water.material.uniforms['time'].value += 0.1 / 60.0;
+            water.material.uniforms['time'].value += 0.1 * delta;
             // sky.material.uniforms['sunPosition'].value = sun;
             // sunLamp.position.copy(sun);
             // sunLamp.position.multiplyScalar(100);
@@ -718,7 +721,7 @@
             renderer.toneMappingExposure = exposure;
             
 
-            camera.rotation.y += rotateLeft ? 0.005 : rotateRight ? -0.005 : 0;
+            camera.rotation.y += (rotateLeft ? 0.3 : rotateRight ? -0.3 : 0) * delta;
 
             effectComposer.render();
             // renderer.render(scene, camera);
